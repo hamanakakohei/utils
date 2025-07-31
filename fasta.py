@@ -5,7 +5,7 @@ from pathlib import Path
 def write_seq_as_fasta(
     seq: str,
     header: str,
-    output_path: str | Path,  # Python 3.10以降（3.9以前は Union[str, Path]）
+    output_path: str | Path,  # Python 3.10以降（3.9以前は from typing import Unionして、ここをUnion[str, Path],にする）
     row_len: int = 60,
     mode: str = 'w'
 ) -> None:
