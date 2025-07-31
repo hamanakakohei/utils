@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 
 from pathlib import Path
+from typing import Union
 
 def write_seq_as_fasta(
     seq: str,
     header: str,
-    output_path: str | Path,  # Python 3.10以降（3.9以前は from typing import Unionして、ここをUnion[str, Path],にする）
+    output_path: Union[str, Path], # Python 3.10以降は str | Path, とする
     row_len: int = 60,
     mode: str = 'w'
 ) -> None:
