@@ -3,6 +3,16 @@
 from PIL import Image
 from pathlib import Path
 from typing import Sequence, Union
+import os
+
+
+def get_api_key(cli_key: str | None) -> str:
+    if cli_key:
+        return cli_key
+    env_key = os.getenv("ALPHAGENOME_API_KEY")
+    if env_key:
+        return env_key
+    sys.exit("Error: APIキーを、--api_keyで与えるか、ALPHAGENOME_API_KEY環境変数に入れて。")
 
 
 def merge_images_and_save(
