@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import sys
 from PIL import Image
 from pathlib import Path
 from typing import Sequence, Union
