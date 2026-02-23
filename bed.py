@@ -34,3 +34,29 @@ def read_bed_with_auto_header(filepath):
         df.columns = colnames[:num_cols]
 
     return df
+
+
+def variant_to_bed(input_path, output_path, margin=0):
+    """
+    Convert variant file (chr:pos:ref:alt + meta) to BED format.
+    """
+    
+    df = pd.read_csv(input_path, sep="\t", header=None, dtype=str)
+    df.columns = ["variant_id", "meta"]
+    
+    # variant_id を分解
+    split_cols = df["variant_id"].str.split(":", expand=True)
+    split_cols.columns = ["chr", "pos", "ref", "alt"]
+    df = pd.concat([df, split_cols], axis=1)
+    
+    df["pos"] = df["pos"].astype(int)
+    df["start"] = df["pos"] - 1
+    df["end"] = df["start"] + df["ref"].str.len()
+    if margin > 0:
+        df["start"] = df["start"] - margin
+        df["end"] = df["end"] + margin
+        df["start"] = df["start"].clip(lower=0)
+    
+    df["name"] = df["variant_id"] + ";" + df["meta"]
+    df = df.sort_values(["chr", "start"])
+    df[["chr", "start", "end", "name"]].to_csv(output_path, sep="\t", header=False, index=False)
